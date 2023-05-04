@@ -1,11 +1,11 @@
 # Supported targets: el9
 
-%define nagios_version 4.4.10
+%define nagios_version 4.4.11
 %define livestatus_version 1.6.0p30
 
 Name: nagios4z
 Version: %{nagios_version}
-Release: 2%{?dist}.zenetys
+Release: 1%{?dist}.zenetys
 
 Summary: Host/service/network monitoring program
 Group: Applications/System
