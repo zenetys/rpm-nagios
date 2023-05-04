@@ -1,0 +1,44 @@
+--- checkmk-1.6.0p30.ori/configure.ac	2022-08-30 08:06:24.000000000 +0000
++++ checkmk-1.6.0p30/configure.ac	2023-03-07 08:24:32.242358641 +0000
+@@ -43,10 +43,10 @@
+ # thread-safe (which is the case within OMD) and the user of e.g. a standalone
+ # version of Livestatus on an old system has to use the configure flag below.
+ # Not really nice, but we can't really do much about that.
+-AC_ARG_ENABLE([rrd-is-thread-safe],
+-    AS_HELP_STRING([--disable-rrd-is-thread-safe], [Use librrd_th instead of librrd]))
+-AS_IF([test "x$enable_rrd_is_thread_safe" != "xno"], [RRDLIB_TO_CHECK=rrd],
+-      [RRDLIB_TO_CHECK=rrd_th])
++#AC_ARG_ENABLE([rrd-is-thread-safe],
++#    AS_HELP_STRING([--disable-rrd-is-thread-safe], [Use librrd_th instead of librrd]))
++#AS_IF([test "x$enable_rrd_is_thread_safe" != "xno"], [RRDLIB_TO_CHECK=rrd],
++#      [RRDLIB_TO_CHECK=rrd_th])
+ 
+ # Checks for programs.
+ AC_PROG_CC([gcc-10 clang-10 gcc-9 clang-9 clang-8 gcc-8 clang-7 gcc-7 clang-6.0 clang-5.0 gcc clang])
+@@ -72,11 +72,11 @@
+ # of security reasons the dynamic linker will ignore our LD_LIBRARY_PATH => no
+ # RRD library found or even the wrong one... :-/
+ RRDLIB=
+-old_LIBS=$LIBS
+-AC_SEARCH_LIBS([rrd_xport], [$RRDLIB_TO_CHECK],
+-    [test "$ac_cv_search_rrd_xport" = "none required" || RRDLIB="$ac_cv_search_rrd_xport"],
+-    [AC_MSG_ERROR([unable to find the rrd_xport function])])
+-LIBS=$old_LIBS
++#old_LIBS=$LIBS
++#AC_SEARCH_LIBS([rrd_xport], [$RRDLIB_TO_CHECK],
++#    [test "$ac_cv_search_rrd_xport" = "none required" || RRDLIB="$ac_cv_search_rrd_xport"],
++#    [AC_MSG_ERROR([unable to find the rrd_xport function])])
++#LIBS=$old_LIBS
+ AC_SUBST(RRDLIB)
+ 
+ # Checks for header files.
+@@ -210,7 +210,7 @@
+ # HACKING ALERT: automake can't really handle optional subdirectories, so we
+ # have to do this in a slightly hacky way by using M4's silent includes.
+ m4_sinclude([livestatus/config_files.m4])
+-m4_sinclude([enterprise/config_files.m4])
+-m4_sinclude([standalone/config_files.m4])
++#m4_sinclude([enterprise/config_files.m4])
++#m4_sinclude([standalone/config_files.m4])
+ 
+ AC_OUTPUT

@@ -1,0 +1,11 @@
+--- checkmk-1.6.0p30.ori/livestatus/src/TimeperiodsCache.cc	2022-08-30 10:06:24.000000000 +0200
++++ checkmk-1.6.0p30/livestatus/src/TimeperiodsCache.cc	2023-03-13 00:44:55.754057608 +0100
+@@ -78,7 +78,7 @@
+             it->second = is_in;
+         }
+     }
+-    if (timeperiod_list != nullptr) {
++    if (timeperiod_list == nullptr) {
+         Informational(_logger)
+             << "Timeperiod cache not updated, there are no timeperiods (yet)";
+     }
