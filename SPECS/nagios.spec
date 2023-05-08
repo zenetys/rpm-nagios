@@ -5,7 +5,7 @@
 
 Name: nagios4z
 Version: %{nagios_version}
-Release: 1%{?dist}.zenetys
+Release: 2%{?dist}.zenetys
 
 Summary: Host/service/network monitoring program
 Group: Applications/System
@@ -133,7 +133,6 @@ chmod 00755 %{buildroot}/%{_localstatedir}/spool/nagios/checkresults
 find %{buildroot}/%{_datadir}/nagios/{html,sample-config} -type d -exec chmod 0755 {} +
 find %{buildroot}/%{_datadir}/nagios/{html,sample-config} -type f -exec chmod 0644 {} +
 # other bits not installed by make install
-install -d -m 0755 %{buildroot}/%{_sysconfdir}/nagios/conf.d
 install -d -m 0755 %{buildroot}/%{_libdir}/nagios/plugins{,/eventhandlers}
 install -d -m 0755 %{buildroot}/%{_localstatedir}/log/nagios/archives
 install -d -m 0755 %{buildroot}/%{_rundir}/nagios
