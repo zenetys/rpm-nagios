@@ -5,7 +5,7 @@
 
 Name: nagios4z
 Version: %{nagios_version}
-Release: 2%{?dist}.zenetys
+Release: 3%{?dist}.zenetys
 
 Summary: Host/service/network monitoring program
 Group: Applications/System
@@ -52,6 +52,8 @@ intermittently running checks on various services that you specify.
 # nagios
 %setup -c
 cd nagioscore-nagios-%{nagios_version}
+patch -p0 < contrib/epel-patches/nagios-0002-Fix-installation-of-httpd-conf.d-config-file.patch
+patch -p1 < contrib/epel-patches/nagios-0004-Fix-path-to-CGI-executables.patch
 patch -p0 < contrib/epel-patches/nagios-0009-fix-localstatedir-for-linux.patch
 patch -p0 < contrib/epel-patches/nagios-0010-remove-information-leak.patch
 cd ..
@@ -115,10 +117,10 @@ make install-unstripped "${make_install_opts[@]}"
 make install-init "${make_install_opts[@]}"
 make install-commandmode "${make_install_opts[@]}"
 make install-exfoliation "${make_install_opts[@]}"
-make install-config "${make_install_opts[@]}"
 # bundled sample configuration goes in share directory
-install -d -m 0755 %{buildroot}/%{_datadir}/nagios/sample-config
-mv %{buildroot}/%{_sysconfdir}/nagios/* %{buildroot}/%{_datadir}/nagios/sample-config/
+make install-config "${make_install_opts[@]}" CFGDIR=%{_datadir}/nagios/sample-config
+make install-webconf "${make_install_opts[@]}" HTTPD_CONF=%{_datadir}/nagios/sample-apache
+install -d -m 0755 %{buildroot}/%{_sysconfdir}/nagios
 # nagios goes to sbin, nagiostats to bin
 install -d -m 0755 %{buildroot}/%{_bindir}
 mv %{buildroot}/{%{_sbindir},%{_bindir}}/nagiostats
@@ -130,8 +132,8 @@ chmod 0644 %{buildroot}/%{_unitdir}/nagios.service
 chmod 0755 %{buildroot}/%{_libdir}/nagios/cgi-bin
 chmod 0755 %{buildroot}/%{_libdir}/nagios/cgi-bin/*.cgi
 chmod 00755 %{buildroot}/%{_localstatedir}/spool/nagios/checkresults
-find %{buildroot}/%{_datadir}/nagios/{html,sample-config} -type d -exec chmod 0755 {} +
-find %{buildroot}/%{_datadir}/nagios/{html,sample-config} -type f -exec chmod 0644 {} +
+find %{buildroot}/%{_datadir}/nagios/{html,sample-{config,apache}} -type d -exec chmod 0755 {} +
+find %{buildroot}/%{_datadir}/nagios/{html,sample-{config,apache}} -type f -exec chmod 0644 {} +
 # other bits not installed by make install
 install -d -m 0755 %{buildroot}/%{_libdir}/nagios/plugins{,/eventhandlers}
 install -d -m 0755 %{buildroot}/%{_localstatedir}/log/nagios/archives
