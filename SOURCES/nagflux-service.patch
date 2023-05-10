@@ -1,0 +1,13 @@
+--- a/nagflux.service	2019-11-17 09:15:29.000000000 +0000
++++ b/nagflux.service	2023-05-10 21:46:15.548065890 +0000
+@@ -6,9 +6,8 @@
+ [Service]
+ User=root
+ Group=root
+-ExecStart=/opt/nagflux/nagflux -configPath /opt/nagflux/config.gcfg
++ExecStart=/usr/sbin/nagflux -configPath /etc/nagflux/config.gcfg
+ Restart=on-failure
+ 
+ [Install]
+ WantedBy=multi-user.target
+-Alias=nagflux.service

@@ -1,0 +1,31 @@
+--- a/config.gcfg.example	2023-05-11 11:11:09.586383062 +0200
++++ b/config.gcfg.example	2023-05-11 11:11:09.586383062 +0200
+@@ -1,5 +1,5 @@
+ [main]
+-    NagiosSpoolfileFolder = "/var/spool/nagios"
++    NagiosSpoolfileFolder = "/var/spool/nagios/nagfluxperfdata"
+     NagiosSpoolfileWorker = 1
+     InfluxWorker = 2
+     MaxInfluxWorker = 5
+@@ -23,18 +23,17 @@
+ [Monitoring]
+     # leave empty to disable
+     # PrometheusAddress = ":8080"
+-    PrometheusAddress = ":8080"
+ 
+ [Livestatus]
+     # tcp or file
+-    Type = "tcp"
++    Type = "file"
+     # tcp: 127.0.0.1:6557 or file /var/run/live
+-    Address = "127.0.0.1:6557"
++    # Address = "/var/spool/nagios/cmd/live.sock"
+     # The amount to minutes to wait for livestatus to come up, if set to 0 the detection is disabled
+     MinutesToWait = 2
+     # Set the Version of Livestatus. Allowed are Nagios, Icinga2, Naemon.
+     # If left empty Nagflux will try to detect it on it's own, which will not always work.
+-    Version = ""
++    Version = "Nagios"
+ 
+ [ModGearman "example"] #copy this block and rename it to add a second ModGearman queue
+     Enabled = false

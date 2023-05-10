@@ -2,6 +2,8 @@
 
 %define nagios_version 4.4.11
 %define livestatus_version 1.6.0p30
+%define nagflux_gomod github.com/griesbacher/nagflux
+%define nagflux_version 5afe855cb2f998eb49c6170ef5cfa8713c95643e
 
 Name: nagios4z
 Version: %{nagios_version}
@@ -40,6 +42,13 @@ BuildRequires: asio-devel
 BuildRequires: libstdc++-static
 BuildRequires: re2-devel
 
+# nagflux
+Source200: https://%{nagflux_gomod}/archive/%{nagflux_version}.tar.gz
+Patch200: nagflux-service.patch
+Patch201: nagflux-config.patch
+
+BuildRequires: golang
+
 %description
 Nagios is an application, system and network monitoring application.
 It can escalate problems by email, pager or any other medium. It is
@@ -47,6 +56,11 @@ also useful for incident or SLA reporting.
 
 Nagios is written in C and is designed as a background process,
 intermittently running checks on various services that you specify.
+
+This build includes:
+- nagios %{nagios_version}
+- livestatus %{livestatus_version}
+- nagflux %{nagflux_version}
 
 %prep
 # nagios
@@ -63,6 +77,14 @@ cd ..
 cd checkmk-%{livestatus_version}
 %patch100 -p1
 %patch101 -p1
+cd ..
+
+# nagflux
+%setup -T -D -a 200
+cd nagflux-%{nagflux_version}
+%patch200 -p1 -b .ori
+sed -i -re 's,\r$,,' config.gcfg.example
+%patch201 -p1 -b .ori
 cd ..
 
 %build
@@ -108,6 +130,17 @@ cd livestatus/src
 %make_build unixcat
 %make_build livestatus.o
 cd ../../..
+
+# nagflux
+mkdir nagflux-build
+cd nagflux-build
+mkdir -p src/%(echo %{nagflux_gomod} |sed -re 's,/nagflux$,,')
+ln -s ../../../../nagflux-%{nagflux_version} src/%{nagflux_gomod}
+export GO111MODULE=off
+export GOPATH=$PWD
+go clean -i %{nagflux_gomod}
+go build  -ldflags '-linkmode=external' %{nagflux_gomod}
+cd ..
 
 %install
 # nagios
@@ -162,6 +195,21 @@ install -D -m 0644 -p -t ../doc/livestatus/ AUTHORS
 install -D -m 0644 -p -t ../license/livestatus/ COPYING
 cd ..
 
+# nagflux
+cd nagflux-build
+install -D -m 0755 -p nagflux %{buildroot}/%{_sbindir}/
+cd ..
+cd nagflux-%{nagflux_version}
+install -d -m 0755 %{buildroot}/%{_sysconfdir}/nagflux
+install -d -m 0755 %{buildroot}/%{_datadir}/nagflux
+install -D -m 0644 -p config.gcfg.example %{buildroot}/%{_datadir}/nagflux/
+install -D -m 0644 -p nagflux.service %{buildroot}/%{_unitdir}/
+install -d -m 0755 %{buildroot}/%{_localstatedir}/spool/nagflux
+# doc, license
+install -D -m 0644 -p -t ../doc/nagflux/ CHANGELOG.md README.md
+install -D -m 0644 -p -t ../license/nagflux/ LICENSE
+cd ..
+
 %pre
 if ! getent group nagios >/dev/null; then
     groupadd -r nagios
@@ -171,12 +219,15 @@ if ! getent passwd nagios >/dev/null; then
 fi
 
 %post
+%systemd_post nagflux.service
 %systemd_post nagios.service
 
 %preun
+%systemd_preun nagflux.service
 %systemd_preun nagios.service
 
 %postun
+%systemd_postun_with_restart nagflux.service
 %systemd_postun_with_restart nagios.service
 
 %files
@@ -185,8 +236,10 @@ fi
 %doc doc/*
 %license license/*
 
+%{_sysconfdir}/nagflux
 %{_sysconfdir}/nagios
 %config(noreplace) %{_sysconfdir}/logrotate.d/nagios
+%ghost %config(noreplace) %{_sysconfdir}/nagflux/config.gcfg
 %ghost %config(noreplace) %{_sysconfdir}/nagios/nagios.cfg
 %ghost %config(noreplace) %{_sysconfdir}/nagios/resource.cfg
 
@@ -194,13 +247,17 @@ fi
 %{_libdir}/nagios
 %{_bindir}/nagiostats
 %{_bindir}/unixcat
+%{_datadir}/nagflux
 %{_datadir}/nagios
+%{_sbindir}/nagflux
 %{_sbindir}/nagios
 %{_tmpfilesdir}/nagios.conf
+%{_unitdir}/nagflux.service
 %{_unitdir}/nagios.service
 
 %attr(-, nagios, nagios) %dir %{_localstatedir}/log/nagios
 %attr(-, nagios, nagios) %dir %{_localstatedir}/log/nagios/archives
+%attr(-, nagios, nagios) %dir %{_localstatedir}/spool/nagflux
 %attr(-, nagios, nagios) %dir %{_localstatedir}/spool/nagios
 %attr(-, nagios, nagios) %dir %{_localstatedir}/spool/nagios/checkresults
 %attr(-, nagios, nagios) %dir %{_localstatedir}/spool/nagios/cmd
