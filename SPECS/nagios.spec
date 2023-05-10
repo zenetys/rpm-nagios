@@ -199,9 +199,9 @@ fi
 %{_tmpfilesdir}/nagios.conf
 %{_unitdir}/nagios.service
 
-%attr(-, nagios, nagios) %dir %{_localstatedir}/spool/nagios/cmd
 %attr(-, nagios, nagios) %dir %{_localstatedir}/log/nagios
 %attr(-, nagios, nagios) %dir %{_localstatedir}/log/nagios/archives
 %attr(-, nagios, nagios) %dir %{_localstatedir}/spool/nagios
 %attr(-, nagios, nagios) %dir %{_localstatedir}/spool/nagios/checkresults
+%attr(-, nagios, nagios) %dir %{_localstatedir}/spool/nagios/cmd
 %attr(-, nagios, nagios) %dir %{_rundir}/nagios
