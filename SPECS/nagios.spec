@@ -1,6 +1,6 @@
 # Supported targets: el9
 
-%define nagios_version 4.4.14
+%define nagios_version 4.5.0
 %define livestatus_version 1.6.0p30
 %define nagflux_gomod github.com/griesbacher/nagflux
 %define nagflux_version 5afe855cb2f998eb49c6170ef5cfa8713c95643e
@@ -15,7 +15,7 @@ License: GPLv2
 URL: https://www.nagios.org/projects/nagios-core/
 
 # nagios
-Source0: https://github.com/NagiosEnterprises/nagioscore/archive/nagios-%{nagios_version}.tar.gz
+Source0: https://github.com/NagiosEnterprises/nagioscore/archive/refs/tags/nagios-%{nagios_version}.tar.gz
 
 BuildRequires: gcc
 BuildRequires: openssl-devel
@@ -114,7 +114,7 @@ cd nagioscore-nagios-%{nagios_version}
     --with-init-type=systemd \
     --with-initdir=%{_unitdir} \
     --with-nagios-user=nagios \
-    --with-nagios-grp=nagios \
+    --with-nagios-group=nagios \
 #end-of-configure
 %make_build all
 cd ..
@@ -126,7 +126,12 @@ autoreconf -fi
     --with-nagios4 \
     --with-re2 \
 #end-of-configure
-cd livestatus/src
+cd livestatus
+mv nagios4{,.dist}
+mkdir nagios4{,/lib}
+cp -a ../../nagioscore-nagios-%{nagios_version}/include/*.h nagios4/
+cp -a ../../nagioscore-nagios-%{nagios_version}/lib/*.h nagios4/lib/
+cd src
 %make_build unixcat
 %make_build livestatus.o
 cd ../../..
