@@ -1,6 +1,6 @@
 # Supported targets: el9
 
-%define nagios_version 4.5.2
+%define nagios_version 4.5.3
 %define livestatus_version 1.6.0p30
 %define nagflux_gomod github.com/griesbacher/nagflux
 %define nagflux_version 5afe855cb2f998eb49c6170ef5cfa8713c95643e
@@ -40,6 +40,7 @@ BuildRequires: automake
 BuildRequires: gcc-g++
 BuildRequires: asio-devel
 BuildRequires: libstdc++-static
+BuildRequires: patchutils
 BuildRequires: re2-devel
 
 # nagflux
@@ -69,7 +70,7 @@ cd nagioscore-nagios-%{nagios_version}
 patch -p0 < contrib/epel-patches/nagios-0002-Fix-installation-of-httpd-conf.d-config-file.patch
 patch -p1 < contrib/epel-patches/nagios-0004-Fix-path-to-CGI-executables.patch
 patch -p0 < contrib/epel-patches/nagios-0009-fix-localstatedir-for-linux.patch
-patch -p0 < contrib/epel-patches/nagios-0010-remove-information-leak.patch
+filterdiff -x ./html/map.php contrib/epel-patches/nagios-0010-remove-information-leak.patch |patch -p0
 cd ..
 
 # livestatus
