@@ -19,6 +19,7 @@ Source0: https://github.com/NagiosEnterprises/nagioscore/archive/refs/tags/nagio
 Patch0: contrib-epel-remove-information-leak-adjust.patch
 
 BuildRequires: gcc
+BuildRequires: make
 BuildRequires: openssl-devel
 BuildRequires: procps-ng
 BuildRequires: s-nail
