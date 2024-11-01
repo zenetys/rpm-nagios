@@ -1,0 +1,24 @@
+--- a/html/main.php	2024-10-24 15:01:24.000000000 +0000
++++ b/html/main.php	2024-11-01 20:22:53.425067469 +0000
+@@ -19,21 +19,7 @@
+ 
+ <script type='text/javascript'>
+ 	var cookie;
+-	<?php if ($cfg["enable_page_tour"]) { ?>
+-		var vbox;
+-		var vBoxId = "main";
+-		var vboxText = "<a href=https://www.nagios.com/tours target=_blank> " +
+-						"Click here to watch the entire Nagios Core 4 Tour!</a>";
+-	<?php } ?>
+ 	$(document).ready(function() {
+-		var user = "<?php echo htmlspecialchars($_SERVER['REMOTE_USER']); ?>";
+-
+-		<?php if ($cfg["enable_page_tour"]) { ?>
+-			vBoxId += ";" + user;
+-			vbox = new vidbox({pos:'lr',vidurl:'https://www.youtube.com/embed/2hVBAet-XpY',
+-								text:vboxText,vidid:vBoxId});
+-		<?php } ?>
+-
+ 		getCoreStatus();
+ 	});
+ 
