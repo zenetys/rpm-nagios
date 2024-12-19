@@ -1,1 +1,1 @@
-nagios 4.5.8 json https://api.github.com/repos/NagiosEnterprises/nagioscore/tags =nagios-(4\.[0-9.]+)
+nagios 4.5.9 json https://api.github.com/repos/NagiosEnterprises/nagioscore/tags =nagios-(4\.[0-9.]+)

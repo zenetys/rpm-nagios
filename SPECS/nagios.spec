@@ -1,6 +1,6 @@
 # Supported targets: el9
 
-%define nagios_version 4.5.8
+%define nagios_version 4.5.9
 %define livestatus_version 1.6.0p30
 %define nagflux_gomod github.com/griesbacher/nagflux
 %define nagflux_version 5afe855cb2f998eb49c6170ef5cfa8713c95643e
