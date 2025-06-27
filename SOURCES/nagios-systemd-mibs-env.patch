@@ -1,0 +1,12 @@
+diff -ru nagioscore-nagios-4.5.9.ori/startup/default-service.in nagioscore-nagios-4.5.9/startup/default-service.in
+--- nagioscore-nagios-4.5.9.ori/startup/default-service.in	2024-12-19 16:33:57.000000000 +0100
++++ nagioscore-nagios-4.5.9/startup/default-service.in	2025-06-27 16:27:53.857285571 +0200
+@@ -5,6 +5,8 @@
+ 
+ [Service]
+ Type=forking
++Environment=MIBS=
++Environment=MIBDIRS=
+ ExecStartPre=@bindir@/nagios -v @sysconfdir@/nagios.cfg
+ ExecStart=@bindir@/nagios -d @sysconfdir@/nagios.cfg
+ ExecStop=@BIN_KILL@ -s TERM ${MAINPID}

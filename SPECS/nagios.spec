@@ -7,7 +7,7 @@
 
 Name: nagios4z
 Version: %{nagios_version}
-Release: 1%{?dist}.zenetys
+Release: 2%{?dist}.zenetys
 
 Summary: Host/service/network monitoring program
 Group: Applications/System
@@ -17,6 +17,7 @@ URL: https://www.nagios.org/projects/nagios-core/
 # nagios
 Source0: https://github.com/NagiosEnterprises/nagioscore/archive/refs/tags/nagios-%{nagios_version}.tar.gz
 Patch0: contrib-epel-remove-information-leak-adjust.patch
+Patch1: nagios-systemd-mibs-env.patch
 
 BuildRequires: gcc
 BuildRequires: make
@@ -74,6 +75,7 @@ patch -p1 < contrib/epel-patches/nagios-0004-Fix-path-to-CGI-executables.patch
 patch -p0 < contrib/epel-patches/nagios-0009-fix-localstatedir-for-linux.patch
 filterdiff -x ./html/map.php -x ./html/main.php contrib/epel-patches/nagios-0010-remove-information-leak.patch |patch -p0
 %patch0 -p1
+%patch1 -p1
 cd ..
 
 # livestatus
