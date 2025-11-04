@@ -1,6 +1,6 @@
 | <nobr>Package name</nobr> | <nobr>Supported targets</nobr> | Includes |
 | :--- | :--- | :--- |
-| nagios4z | el9 | nagios, livestatus, nagflux |
+| nagios4z | el9, el10 | nagios, livestatus, nagflux |
 <br/>
 
 ## Build:
@@ -12,6 +12,7 @@ from internet if not already downloaded.
 
 ```
 $ ./rpmbuild-docker -d el9
+$ ./rpmbuild-docker -d el10
 ```
 
 ## Prebuilt packages:

@@ -1,4 +1,6 @@
-# Supported targets: el9
+# Supported targets: el9, el10
+
+%global source_date_epoch_from_changelog 0
 
 %define nagios_version 4.5.10
 %define livestatus_version 1.6.0p30
@@ -7,7 +9,7 @@
 
 Name: nagios4z
 Version: %{nagios_version}
-Release: 1%{?dist}.zenetys
+Release: 2%{?dist}.zenetys
 
 Summary: Host/service/network monitoring program
 Group: Applications/System
@@ -74,23 +76,23 @@ patch -p0 < contrib/epel-patches/nagios-0002-Fix-installation-of-httpd-conf.d-co
 patch -p1 < contrib/epel-patches/nagios-0004-Fix-path-to-CGI-executables.patch
 patch -p0 < contrib/epel-patches/nagios-0009-fix-localstatedir-for-linux.patch
 filterdiff -x ./html/map.php -x ./html/main.php contrib/epel-patches/nagios-0010-remove-information-leak.patch |patch -p0
-%patch0 -p1
-%patch1 -p1
+%patch -P 0 -p1
+%patch -P 1 -p1
 cd ..
 
 # livestatus
 %setup -T -D -a 100
 cd checkmk-%{livestatus_version}
-%patch100 -p1
-%patch101 -p1
+%patch -P 100 -p1
+%patch -P 101 -p1
 cd ..
 
 # nagflux
 %setup -T -D -a 200
 cd nagflux-%{nagflux_version}
-%patch200 -p1 -b .ori
+%patch -P 200 -p1 -b .ori
 sed -i -re 's,\r$,,' config.gcfg.example
-%patch201 -p1 -b .ori
+%patch -P 201 -p1 -b .ori
 cd ..
 
 %build
