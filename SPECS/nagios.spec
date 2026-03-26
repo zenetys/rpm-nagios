@@ -2,7 +2,7 @@
 
 %global source_date_epoch_from_changelog 0
 
-%define nagios_version 4.5.11
+%define nagios_version 4.5.12
 %define livestatus_version 1.6.0p30
 %define nagflux_gomod github.com/griesbacher/nagflux
 %define nagflux_version 5afe855cb2f998eb49c6170ef5cfa8713c95643e
